@@ -31,3 +31,5 @@
 *.out
 *.app
 guessing_game
+.ccls
+compile_commands.json
