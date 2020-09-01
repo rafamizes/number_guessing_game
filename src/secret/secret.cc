@@ -3,7 +3,7 @@
  *
  * All rights reserved.
  */
-#include "secret.h"
+#include "src/secret/secret.hh"
 
 #include <cstdlib>
 #include <ctime>
