@@ -8,6 +8,8 @@
 #include <iostream>
 #include <string>
 
+#include "src/secret/secret.hh"
+
 int rand_number();
 
 int main() {
