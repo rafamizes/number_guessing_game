@@ -13,3 +13,5 @@ Secret::Secret() : Secret(time(0)) {}
 Secret::Secret(unsigned int seed) { srand(seed); }
 
 int Secret::number() const { return rand() % 100; }
+
+Secret::operator int() const { return this->number(); }

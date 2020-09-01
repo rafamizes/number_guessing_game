@@ -17,6 +17,8 @@ class Secret {
    * @return a random number in rage 0..99.
    */
   int number() const;
+
+  operator int() const;
 };
 
 #endif  // _NUMBER_GUESSING_GAME_SRC_SECRET_SECRET_H_
