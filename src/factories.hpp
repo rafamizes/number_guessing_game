@@ -6,12 +6,12 @@
 #ifndef SRC_FACTORIES_HPP_
 #define SRC_FACTORIES_HPP_
 
-#include "src/attempts/attempts.hpp"
-#include "src/diff/diff.hpp"
-#include "src/diff/verbose_diff.hpp"
-#include "src/farewell/farewell.hpp"
-#include "src/guess/guess.hpp"
-#include "src/secret/secret.hpp"
+#include "attempts/attempts.hpp"
+#include "diff/diff.hpp"
+#include "diff/verbose_diff.hpp"
+#include "farewell/farewell.hpp"
+#include "guess/guess.hpp"
+#include "secret/secret.hpp"
 
 Secret secret();
 
