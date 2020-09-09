@@ -1,31 +1,23 @@
-appname := guessing_game
-CXX=g++
-INCLUDES = -Isrc/secret -Isrc/guess -Isrc/diff -Isrc/attempts -Isrc/farewell
-CXXFLAGS=-std=c++17 -Wall $(INCLUDES)
+APP ?= number_guessing_game
+src_dirs := src
+build_dir := build
 
-srcfiles := $(shell find -name "*.cpp")
-objects  := $(patsubst %.cpp, %.o, $(srcfiles))
+sources := $(shell find $(src_dirs) -name *.cpp -or -name *.c)
+objects := $(addsuffix .o,$(basename $(sources)))
+deps := $(objects:.o=.d)
 
-all: $(appname)
+inclue_dirs := $(shell find $(src_dirs) -type d)
+include_flags := $(addprefix -I,$(inclue_dirs))
+CPPFLAGS ?= $(include_flags) -MMD -MP
 
-$(appname): build_msg $(objects)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(appname) $(objects) $(LDLIBS)
+$(APP): $(objects)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(APP) $(objects) $(LDLIBS)
 
-depend: .depend
-
-.depend: $(srcfiles)
-	$(RM) ./.depend
-	$(CXX) $(CXXFLAGS) -MM $^>>./.depend;
-
-.PHONY: clean build_msg
+.PHONY: build_msg clean
 build_msg:
-	@echo "Build Guessing Number"
+	@echo "include_flags: "$(include_flags)
 clean:
-	$(RM) $(objects)
+	$(RM) $(TARGET) $(objects) $(deps)
 
-include .depend
-# main.o: main.cpp factories.hpp
-# 	g++ $(CPPFLAGS) -c main.cpp
-# factories.o: factories.cpp factories.hpp 
-# 	g++ $(CPPFLAGS) -c factories.cpp
+-include $(deps)
 
