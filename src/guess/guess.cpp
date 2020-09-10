@@ -15,4 +15,3 @@ int Guess::number() const {
   std::cin >> guess;
   return guess;
 }
-Guess::operator int() const { return this->number(); }

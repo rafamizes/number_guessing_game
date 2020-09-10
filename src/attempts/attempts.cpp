@@ -9,5 +9,3 @@ bool Attempts::matches() const {
   }
   return attempt <= _max;
 }
-
-Attempts::operator bool() const { return this->matches(); }

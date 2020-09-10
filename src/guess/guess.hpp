@@ -22,7 +22,6 @@ class Guess final {
    * Prompts the user for a integer number
    */
   int number() const;
-  operator int() const;
 
  private:
   std::string _msg;

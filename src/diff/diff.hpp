@@ -15,8 +15,6 @@ class Diff final {
 
   int number() const;
 
-  operator int() const;
-
  private:
   const Secret _secret;
   const Guess _guess;

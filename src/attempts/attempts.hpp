@@ -9,7 +9,6 @@ class Attempts final {
   Attempts(VerboseDiff diff, int max);
 
   bool matches() const;
-  operator bool() const;
 
  private:
   const VerboseDiff _vdiff;
