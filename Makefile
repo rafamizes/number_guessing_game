@@ -9,6 +9,7 @@ deps := $(objects:.o=.d)
 inclue_dirs := $(shell find $(src_dirs) -type d)
 include_flags := $(addprefix -I,$(inclue_dirs))
 CPPFLAGS ?= $(include_flags) -MMD -MP
+CXXFLAGS ?= -std=c++17 -Wall
 
 $(APP): $(objects)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(APP) $(objects) $(LDLIBS)
