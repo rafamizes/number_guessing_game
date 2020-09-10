@@ -8,7 +8,7 @@
 /**
  * The secret number.
  */
-class Secret {
+class Secret final {
  public:
   Secret();
   // Ctor.

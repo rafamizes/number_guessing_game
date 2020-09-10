@@ -4,14 +4,14 @@
  * All rights reserved.
  */
 #ifndef SRC_GUESS_GUESS_HPP_
-#define SRC_GUESS_GUESS_HPP_ 
+#define SRC_GUESS_GUESS_HPP_
 
 #include <string>
 
 /**
  * Represents a guessed number.
  */
-class Guess {
+class Guess final {
  public:
   /**
    * Ctor.
