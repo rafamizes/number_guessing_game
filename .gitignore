@@ -30,6 +30,9 @@
 *.exe
 *.out
 *.app
-guessing_game
+
+# language server config. file
 .ccls
-compile_commands.json
+
+# Ignore any executables
+bin/*
