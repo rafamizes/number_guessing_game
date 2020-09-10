@@ -11,6 +11,9 @@
 class Secret {
  public:
   Secret();
+  // Ctor.
+  // @param seed the seed for initializing rand function.
+  explicit Secret(unsigned seed);
   /**
    * The randomly generated secret number.
    * @return a random number in rage 0..99.
@@ -20,7 +23,7 @@ class Secret {
   operator int() const;
 
  private:
-  const int _value;
+  const unsigned _seed;
 };
 
 #endif  // _NUMBER_GUESSING_GAME_SRC_SECRET_SECRET_HPP_

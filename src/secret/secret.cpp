@@ -8,8 +8,20 @@
 #include <cstdlib>
 #include <ctime>
 
-Secret::Secret() : _value{rand() % 100} {}
+#include <iostream>
+#include <sstream>
+#include <stdexcept>
 
-int Secret::number() const { return _value; }
+Secret::Secret() : Secret{static_cast<unsigned>(time(nullptr))} {}
+
+Secret::Secret(unsigned seed) : _seed{seed} {}
+
+int Secret::number() const {
+  static int value = [this]() {
+    srand(_seed);
+    return rand() % 100;
+  }();
+  return value;
+}
 
 Secret::operator int() const { return this->number(); }
