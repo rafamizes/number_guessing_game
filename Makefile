@@ -1,47 +1,93 @@
 APP ?= number_guessing_game
-src_dirs := src
-build_dir := build
-bin_dir := bin
+# the path of the source files.
+src := number_guessing_game
+# the path of the output build directory — the place where the intermediate
+# outputs of the compiler are put into.
+build := build
+# the path of the generated binaries — executable files.
+bin := bin
+# the path of the application executable.
+app := $(bin)/$(APP)
 
-# Searches for cpp, c and assembly files.
-# In case there are assembly files, just add "-or -name *.s" 
-sources := $(shell find $(src_dirs) -name *.cpp -or -name *.c)
-objects := $(sources:%=$(build_dir)/%.o)
+# Searches for .cpp and .c files.
+# If there are assembly files, just add "-or -name *.s" 
+sources := $(shell find $(src) -name *.cpp -or -name *.c)
+objects := $(sources:%=$(build)/%.o)
 deps := $(objects:.o=.d)
 
-inclue_dirs := $(shell find $(src_dirs) -type d)
-include_flags := $(addprefix -I,$(inclue_dirs))
-CPPFLAGS ?= $(include_flags) -MMD -MP
-CXXFLAGS ?= -std=c++17 -Wall
+# Searches for .cpp.o and .c.o files WITHOUT the main function.
+# According to the project convention, only files whose name end with
+# '.main.cpp' or '.test.cpp' can have main function.
+objs_without_main_func := $(filter-out %.main.cpp.o %.test.cpp.o,$(objects))
+# the objects that make up the application executable.
+app_objs := $(filter %$(APP).cpp.o,$(objects)) $(objs_without_main_func)
+deps := $(objects:.o=.d)
+
 MKDIR_P ?= mkdir -p
+CXX ?= g++
+LIB ?= -lpthread -static-libasan -static-libubsan -static-liblsan
+# Warning Options
+# Wpedantic: issue all the warnings demanded by strict ISO C and ISO C++.
+warnings := -Wall -Wextra -Wpedantic -Wsuggest-override -Wconversion \
+-Wsign-conversion -Wuseless-cast -Wshadow -Wvla -Wnull-dereference -Wswitch-enum \
+-Wduplicated-cond -Wduplicated-branches -Wimplicit-fallthrough
+
+# Sanitizers improve application security — good to use in debug mode. Make sure
+# to specify -fsanitize=undefined,address to BOTH the compile and the link line.
+sanitizers := -fsanitize=address,undefined,leak
+
+debug :=  -fno-omit-frame-pointer -fvar-tracking-assignments -rdynamic
+override CPPFLAGS += -I. -MMD -D_GLIBCXX_DEBUG
+# -D_GLIBCXX_DEBUG => switches out the std lib with a safe one that does bounds
+#  checking on everything (even overloaded [] operators)
+
+# it is important to use at least optimization level -O1 because it appears that
+# some errors are not detected without optimization. If a stack trace is not
+# needed, -g and -fno-omit-frame-pointer can be skipped.
+override CXXFLAGS += -std=c++17 -g -O1 $(warnings) $(sanitizers) $(debug)
+
+.PHONY: all
 
 # Application's executable rule.
-$(bin_dir)/$(APP): build_msg $(objects)
-	$(CXX) $(objects) -o $@ $(LDFLAGS)
+# 
+# Notice that both the compilation and linking steps require the contents of the
+# sanitizers variable.
+$(app): build_msg $(objects)
+	@$(RM) $@
+	$(CXX) $(objects) -o $@ $(sanitizers) $(LIB) $(LDFLAGS)
+	@ls -lh $@
 
-# C++ sources
-$(build_dir)/%.cpp.o: %.cpp
+# C++ sources to objects
+$(build)/%.cpp.o: %.cpp 
 	$(MKDIR_P) $(dir $@)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
-# C sources
-# $(build_dir)/%.c.o: %.c
-# 	$(MKDIR_P) $(dir $@)
-# 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+# Make OBJS depend on CPP/C/CXX/LD flags 
+$(objects): $(build)/flags.txt
 
-# Assembly 
-# $(build_dir)/%.s.o: %.s
-# 	$(MKDIR_P) $(dir $@)
-# 	$(AS) $(ASFLAGS) -c $< -o $@
+# Makes bin directory
+$(bin):
+	$(MKDIR_P) $@
 
-# Instructs make to remove all *.d files after compilation
-.INTERMEDIATE: $(deps)
-
-.PHONY: build_msg clean
+.PHONY: build_msg clean flags
 build_msg:
 	@echo "Building "$(APP)
 clean:
-	$(RM) -r $(build_dir)
+	$(RM) -r $(build)
 
--include $(deps)
-
+# Creates a new flags.txt file when flags change; make will detect this change
+# and force a rebuild of all the sources
+$(build)/flags.txt: flags
+	$(MKDIR_P) $(dir $@)
+	$(Q){                                  \
+		TMP=`mktemp`;                          \
+		echo 'CPPFLAGS: $(CPPFLAGS)' >> $$TMP; \
+		echo 'CFLAGS:   $(CFLAGS)'   >> $$TMP; \
+		echo 'CXXFLAGS: $(CXXFLAGS)' >> $$TMP; \
+		echo 'LDFLAGS:  $(LDFLAGS)'  >> $$TMP; \
+		cmp -s $$TMP $@ || mv -f $$TMP $@;     \
+		}
+# Avoids inclusion of the dependencies when cleaning.
+ifneq ($(MAKECMDGOALS),clean)
+  -include $(deps)
+endif

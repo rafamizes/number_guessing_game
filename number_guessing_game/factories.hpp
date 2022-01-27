@@ -1,10 +1,8 @@
-/**
- * Copyright © 2020 Platis.
- *
- * All rights reserved.
- */
-#ifndef SRC_FACTORIES_HPP_
-#define SRC_FACTORIES_HPP_
+// Copyright 2022
+// 
+// Prototypes of factory functions
+#ifndef NUMBER_GUESSING_GAME_FACTORIES_HPP_
+#define NUMBER_GUESSING_GAME_FACTORIES_HPP_
 
 #include "attempts/attempts.hpp"
 #include "diff/diff.hpp"
@@ -25,4 +23,4 @@ Attempts attempts(VerboseDiff vdiff, int max);
 
 Farewell farewell(Attempts attempts, Secret secret);
 
-#endif  // SRC_FACTORIES_HPP_
+#endif  // NUMBER_GUESSING_GAME_FACTORIES_HPP_

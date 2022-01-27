@@ -1,9 +1,5 @@
-/**
- * Copyright © 2020 Platis.
- *
- * All rights reserved.
- */
-#include "verbose_diff.hpp"
+#include <number_guessing_game/diff/verbose_diff.hpp>
+
 #include <iostream>
 
 VerboseDiff::VerboseDiff(Diff diff) : _diff{diff} {}
@@ -19,5 +15,3 @@ int VerboseDiff::number() const {
   }
   return diff;
 }
-
-VerboseDiff::operator int() const { return this->number(); }
