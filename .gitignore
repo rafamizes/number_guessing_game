@@ -32,7 +32,9 @@
 *.app
 
 # language server config. file
-.ccls
+.ccls*
 
 # Ignore any executables
 bin/*
+# Ignore intermediate build files
+build/*
