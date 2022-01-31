@@ -1,3 +1,4 @@
+// Copyright 2022
 #include <number_guessing_game/guess/guess.hpp>
 
 #include <iostream>

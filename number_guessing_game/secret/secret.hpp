@@ -10,7 +10,7 @@ class Secret final {
   /// Initializes the rand function with [seed].
   explicit Secret(unsigned seed);
 
-  /// Returns the randomly generated secret number in range 0 .. 99.
+  /// Returns the randomly generated secret number in range 0–99.
   int number() const noexcept;
 
  private:

@@ -1,19 +1,25 @@
 // Copyright 2022
-#include <climits>
-
-#include <iostream>
-#include <number_guessing_game/factories.hpp>
-
+#include <number_guessing_game/attempts/attempts.hpp>
+#include <number_guessing_game/diff/diff.hpp>
+#include <number_guessing_game/diff/verbose_diff.hpp>
+#include <number_guessing_game/farewell/farewell.hpp>
+#include <number_guessing_game/guess/guess.hpp>
+#include <number_guessing_game/secret/secret.hpp>
 int main() {
+  constexpr int maxAttempts = 5;
   const Secret secret;
-  /* secret.number(); */
-  farewell(attempts(vdiff(diff(secret, guess())), 5), secret).say();
-  /* int* intPtr = nullptr; */
-  /* std::cout << "intPtr value: " << *intPtr << "\n"; */
-  /* { */
-    /* int aValue = 9; */
-    /* intPtr = &aValue; */
-  /* } */
-  /* std::cout << "intPtr value: " << *intPtr << "\n"; */
+  Farewell{
+    Attempts{
+      VerboseDiff{
+        Diff{
+          secret,
+          Guess{"Guess a number in 0..99 range: "}
+        }
+      },
+      maxAttempts
+    },
+    secret
+  }.say();
+
   return 0;
 }

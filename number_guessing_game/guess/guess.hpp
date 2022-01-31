@@ -1,3 +1,4 @@
+// Copyright 2022
 #ifndef NUMBER_GUESSING_GAME_GUESS_GUESS_HPP_
 #define NUMBER_GUESSING_GAME_GUESS_GUESS_HPP_
 
@@ -16,4 +17,4 @@ class Guess final {
   std::string _msg;
 };
 
-#endif  // NUMBER_GUESSING_GAME_GUESS_GUESS__HPP_
+#endif  // NUMBER_GUESSING_GAME_GUESS_GUESS_HPP_
